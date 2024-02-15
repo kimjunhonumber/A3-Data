@@ -81,7 +81,7 @@ def calculate_suicide_rate_difference(input_df, input_year):
 col = st.columns((1.5,8), gap='medium')
 
 with col[0]:
-    st.markdown('### 자살 생각 통계')
+    st.markdown('### 자살 생각 경험률')
 
     # Assuming df_suicide_rate_difference_sorted is already calculated and sorted
     df_suicide_rate_difference_sorted = calculate_suicide_rate_difference(df_location, selected_year)
@@ -95,17 +95,17 @@ with col[0]:
         st.metric(label=state_name, value=state_population, delta=state_delta)
 
 with col[1]:
-    tab1 ,tab2,tab3= st.tabs(["Map chart", "Heat map", "table map"])
+    tab1 ,tab2= st.tabs(["Map chart", "Heat map"])
 
     with tab1:
         m = folium.Map([37.58, 127.0], zoom_start=11)
         pivot_table = pd.pivot_table(df_suicide_num,index="distinction",values=["suicide_num"])
-        pivot_table["선택"] = pivot_table["suicide_num"].apply(lambda x: False)
+        pivot_table["선택"] = pivot_table["suicide_num"].apply(lambda x: True)
 
         col1, col2 = st.columns([0.3,0.9])
 
         with col1:
-            st.header("지역별 자살수")
+            st.markdown(" #### 지역별 자살 통계")
             st.write("\n\n")
             edited_df = st.data_editor(pivot_table)
 
@@ -127,27 +127,27 @@ with col[1]:
             folium_static(m)
     
     with tab2:
-        st.markdown('#### 지역별 자살 생각')
+        st.markdown('#### 지역별 자살 생각 경험률')
         heatmap = make_heatmap(df_location, 'year', 'distinction', 'suicide', selected_color_theme)
         st.altair_chart(heatmap, use_container_width=True)
     
-    with tab3:
-        st.markdown('#### 지역별 자살 생각')
-        st.dataframe(df_selected_year_sorted,
-                    column_order=("distinction", "suicide"),
-                    hide_index=True,
-                    width=None,
-                    column_config={
-                        "distinction": st.column_config.TextColumn(
-                            "distinction",
-                        ),
-                        "suicide": st.column_config.ProgressColumn(
-                            "suicide",
-                            format="%f",
-                            min_value=0,
-                            max_value=max(df_selected_year_sorted.suicide),
-                        )}
-                    )
+    # with tab3:
+    #     st.markdown('#### 지역별 자살 생각')
+    #     st.dataframe(df_selected_year_sorted,
+    #                 column_order=("distinction", "suicide"),
+    #                 hide_index=True,
+    #                 width=None,
+    #                 column_config={
+    #                     "distinction": st.column_config.TextColumn(
+    #                         "distinction",
+    #                     ),
+    #                     "suicide": st.column_config.ProgressColumn(
+    #                         "suicide",
+    #                         format="%f",
+    #                         min_value=0,
+    #                         max_value=max(df_selected_year_sorted.suicide),
+    #                     )}
+    #                 )
 
 #######################
 #### 대전시 자살 생각 경험률 #######
@@ -162,11 +162,11 @@ def bar_chart(*geo):
     return fig
     
 df = pd.read_excel("연령대별자살생각경험.xlsx")
-st.title("대전시 자살 생각 경험률")
+st.markdown('## 대전시 자살 생각 경험률')
 
 
 pivot_table = pd.pivot_table(df,index="연령별",values=["자살 생각 경험률"])
-pivot_table["선택"] = pivot_table["자살 생각 경험률"].apply(lambda x: False)
+pivot_table["선택"] = pivot_table["자살 생각 경험률"].apply(lambda x: True)
 
 
 col = st.columns([0.3,0.9])
@@ -187,7 +187,8 @@ with col[1]:
 #### 대전시 자살 생각 원인 #######
 # Load data
 df = pd.read_excel("연령별자살생각원인.xlsx")
-st.title("대전시 자살 생각 원인")
+st.markdown("## 대전시 자살 생각 원인")
+# st.title("대전시 자살 생각 원인")
 col = st.columns((5,5), gap='medium')
 with col[0]:
     # Function to create a bar chart for a given value
