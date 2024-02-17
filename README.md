@@ -1,6 +1,7 @@
 # A3-Data
 Data Analysis repository for Team A3
 
+대전의 문제를 찾아보기 위한 데이터분석 자료입니다.
 배포된 링크: https://dashboarda-03.streamlit.app/ 
 
 
